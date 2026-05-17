@@ -1,0 +1,19 @@
+name: "Strategist"
+description: "战略师：负责叙事节奏规划、情节走向决策、多线索协调"
+system_prompt: "prompt.md"
+few_shots: "samples.json"
+output_schema:
+  type: "object"
+  properties:
+    chapter_goal: {type: "string"}
+    must_keep: {type: "array"}
+    must_avoid: {type: "array"}
+    focus_characters: {type: "array"}
+    emotional_direction: {type: "string"}
+    pacing: {type: "string"}
+    subplot_attention: {type: "array"}
+    foreshadowing_actions:
+      type: "object"
+      properties:
+        to_plant: {type: "array"}
+        to_resolve: {type: "array"}

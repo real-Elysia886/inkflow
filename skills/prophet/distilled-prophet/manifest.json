@@ -1,0 +1,42 @@
+{
+  "manifest_version": "1",
+  "id": "inkflow.prophet.distilled-prophet",
+  "kind": "inkflow-skill",
+  "skill_type": "prophet",
+  "slug": "distilled-prophet",
+  "display_name": "大纲师（蒸馏作品）",
+  "description": "根据都市异能/玄幻网文风格，生成符合章节结构、伏笔管理和角色弧线要求的详细章纲。",
+  "entrypoints": {
+    "agent": "agent.py",
+    "config": "config.yaml",
+    "prompt": "prompt.md",
+    "samples": "samples.json"
+  },
+  "artifacts": [
+    "agent.py",
+    "config.yaml",
+    "prompt.md",
+    "samples.json",
+    "manifest.json",
+    "meta.json"
+  ],
+  "capabilities": [
+    "execute",
+    "configure",
+    "prompt"
+  ],
+  "engine": {
+    "name": "inkflow",
+    "version": "0.1.0",
+    "skill_type": "prophet",
+    "provider": "deepseek",
+    "model": "deepseek-expert"
+  },
+  "install": {
+    "compatible_runtimes": [
+      "inkflow-cli",
+      "claude-code"
+    ],
+    "min_schema_version": "1"
+  }
+}

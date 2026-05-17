@@ -1,0 +1,42 @@
+{
+  "manifest_version": "1",
+  "id": "inkflow.editor.distilled-editor",
+  "kind": "inkflow-skill",
+  "skill_type": "editor",
+  "slug": "distilled-editor",
+  "display_name": "编辑（蒸馏作品）",
+  "description": "基于该都市异能小说风格，进行语言、风格和情节逻辑的多维度编辑审校",
+  "entrypoints": {
+    "agent": "agent.py",
+    "config": "config.yaml",
+    "prompt": "prompt.md",
+    "samples": "samples.json"
+  },
+  "artifacts": [
+    "agent.py",
+    "config.yaml",
+    "prompt.md",
+    "samples.json",
+    "manifest.json",
+    "meta.json"
+  ],
+  "capabilities": [
+    "execute",
+    "configure",
+    "prompt"
+  ],
+  "engine": {
+    "name": "inkflow",
+    "version": "0.1.0",
+    "skill_type": "editor",
+    "provider": "openai",
+    "model": "gpt-4o"
+  },
+  "install": {
+    "compatible_runtimes": [
+      "inkflow-cli",
+      "claude-code"
+    ],
+    "min_schema_version": "1"
+  }
+}

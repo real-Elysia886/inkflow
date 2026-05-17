@@ -1,0 +1,27 @@
+[
+  {
+    "input": {
+      "chapter_text": "李明走进房间，看到桌上有一封信。他打开信，读完后皱起眉头。'这不可能，'他说。然后他坐下来思考。",
+      "world_setting": "现代都市悬疑",
+      "characters": "李明：侦探，冷静理性，不轻易表露情绪"
+    },
+    "output": {
+      "style_score": 5,
+      "logic_score": 6,
+      "character_score": 4,
+      "pacing_score": 4,
+      "dialogue_score": 3,
+      "description_score": 3,
+      "foreshadowing_score": 5,
+      "total_score": 30,
+      "pass": false,
+      "issues": [
+        {"severity": "high", "category": "描写", "description": "场景描写过于简单，缺乏细节和氛围", "suggestion": "增加环境细节，通过感官描写营造悬疑氛围"},
+        {"severity": "high", "category": "角色", "description": "李明的反应与冷静理性的设定不符，'这不可能'过于直白", "suggestion": "改为内心独白或更克制的外在反应"},
+        {"severity": "medium", "category": "节奏", "description": "叙事过于平铺直叙，缺乏张力", "suggestion": "在关键动作处放慢节奏，增加心理描写"}
+      ],
+      "highlights": [],
+      "rewrite_instructions": "重写时注重：1）用细节描写营造氛围；2）李明的反应要符合侦探的克制性格，用行为而非语言表达震惊；3）放慢阅读信件的节奏，让读者跟随角色逐步发现信息"
+    }
+  }
+]

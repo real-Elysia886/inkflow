@@ -1,0 +1,7 @@
+name: 策略师（蒸馏作品）
+description: 基于都市异能/玄幻《司命天物》世界观的故事策略师，擅长冲突设计、节奏把控、世界观构建及伏笔与多线叙事规划。
+model_route: gpt-4o
+temperature: 0.7
+system_prompt: prompt.md
+few_shots: samples.json
+output_schema: {}

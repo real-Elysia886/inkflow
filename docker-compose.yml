@@ -1,0 +1,10 @@
+services:
+  inkflow-app:
+    build: .
+    container_name: inkflow-app
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    volumes:
+      - ./inkflow/config:/app/inkflow/config
+      - ./data:/app/data

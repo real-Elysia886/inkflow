@@ -1,0 +1,7 @@
+name: 大纲师（蒸馏作品）
+description: 根据都市异能/玄幻网文风格，生成符合章节结构、伏笔管理和角色弧线要求的详细章纲。
+model_route: deepseek-expert
+temperature: 0.4
+system_prompt: prompt.md
+few_shots: samples.json
+output_schema: {}

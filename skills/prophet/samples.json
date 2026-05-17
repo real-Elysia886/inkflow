@@ -1,0 +1,19 @@
+[
+  {
+    "input": {
+      "target_chapter": 3,
+      "world_setting": "修仙世界。",
+      "recent_summaries": ["主角刚刚突破筑基期。"],
+      "characters": {}
+    },
+    "output": {
+      "chapter_title": "第三十七章：筑基雷劫",
+      "chapter_summary": "主角渡劫时遭遇异常天象，被神秘老者暗中相助。渡劫后发现体内多了一道金色印记。",
+      "new_characters": [
+        {"name": "云游散人", "identity": "化神期散修", "trait": "游戏人间的大能"}
+      ],
+      "key_events": ["雷劫降临", "金色印记浮现"],
+      "foreshadowing": ["神秘老者的真实身份", "金色印记的来源"]
+    }
+  }
+]

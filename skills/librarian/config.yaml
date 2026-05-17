@@ -1,0 +1,11 @@
+name: "Librarian"
+description: "记录员：负责记忆压缩、伏笔回收状态更新、角色状态追踪"
+system_prompt: "prompt.md"
+few_shots: "samples.json"
+output_schema:
+  type: "object"
+  properties:
+    chapter_summary: {type: "string"}
+    new_foreshadowings: {type: "array"}
+    resolved_foreshadowings: {type: "array"}
+    character_updates: {type: "object"}

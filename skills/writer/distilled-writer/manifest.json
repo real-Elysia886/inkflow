@@ -1,0 +1,42 @@
+{
+  "manifest_version": "1",
+  "id": "inkflow.writer.distilled-writer",
+  "kind": "inkflow-skill",
+  "skill_type": "writer",
+  "slug": "distilled-writer",
+  "display_name": "写手（蒸馏作品）",
+  "description": "轻松幽默与热血深沉并存的二次元网文写手，擅长都市异能/玄幻题材，注重角色个性、节奏把控和伏笔悬念",
+  "entrypoints": {
+    "agent": "agent.py",
+    "config": "config.yaml",
+    "prompt": "prompt.md",
+    "samples": "samples.json"
+  },
+  "artifacts": [
+    "agent.py",
+    "config.yaml",
+    "prompt.md",
+    "samples.json",
+    "manifest.json",
+    "meta.json"
+  ],
+  "capabilities": [
+    "execute",
+    "configure",
+    "prompt"
+  ],
+  "engine": {
+    "name": "inkflow",
+    "version": "0.1.0",
+    "skill_type": "writer",
+    "provider": "ollama_local",
+    "model": "llama3:70b"
+  },
+  "install": {
+    "compatible_runtimes": [
+      "inkflow-cli",
+      "claude-code"
+    ],
+    "min_schema_version": "1"
+  }
+}

@@ -1,0 +1,6 @@
+name: "Writer"
+description: "作者：风格化正文填充、情绪拉扯、画面过渡"        
+max_tokens: 4096
+system_prompt: "prompt.md"
+few_shots: "samples.json"
+style: "default"             

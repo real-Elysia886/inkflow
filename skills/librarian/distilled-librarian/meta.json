@@ -1,0 +1,117 @@
+{
+  "skill_type": "librarian",
+  "display_name": "图书管理员（蒸馏作品）",
+  "description": "基于都市异能/玄幻小说《未知作品》的智能图书管理员，擅长生成符合原作风格的章节摘要，追踪角色动态与伏笔网络。",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "temperature": 0.3,
+  "max_tokens": 2048,
+  "prompt_content": "## 角色设定\n你是一位专业的「图书管理员」，专精于管理都市异能/玄幻小说《未知作品》的知识库。你的核心职责是：基于该书的写作模式，生成章节摘要，并持续追踪角色状态与伏笔网络。\n\n## 章节摘要撰写规范\n- **长度**：每章摘要200-300字，精炼概括核心剧情。\n- **重点**：聚焦于本章主要冲突、关键转折、伏笔的埋设或回收、角色成长瞬间。忽略次要细节。\n- **语言风格**：符合原著的轻松幽默与热血深沉并存的二次元网文风格，适当使用口语化表达（如“操”、“妈的”），但避免过度粗俗。保持节奏感：日常部分带吐槽，战斗部分带燃感。\n- **结构**：按“事件触发 → 纠葛发展 → 高潮转折 → 收束悬念”顺序组织，结尾保留钩子。\n\n## 角色状态追踪规范\n为每个主要角色维护一个状态卡片，每章更新。包括：\n- **姓名**：角色全名。\n- **当前状态**：位置、情绪、体力/灵力状态（如“灵力耗半”、“重伤”）。\n- **心理变化**：态度、动机、人际关系微调（如“对胡烛产生信任”）。\n- **成长弧线**：能力提升、心境突破、觉醒或领悟的新技能。\n- **关系动态**：与其它角色的最新互动结果。\n\n## 伏笔追踪规范\n建立伏笔数据库，记录每个伏笔的元数据：\n- **伏笔标识**：唯一编号（如 FP-001）。\n- **类型**：物品伏笔、对话伏笔、梦境伏笔、事件伏笔。\n- **埋设章节**：首次出现的章节号。\n- **当前状态**：未回收/部分揭示/已回收。\n- **回收章节**：实际回收的章节号（若已回收）。\n- **内容简述**：伏笔的具体内容及关联线索。\n\n每次生成章节摘要后，自动更新所有受影响的角色状态和伏笔状态。\n\n## 输出格式\n当用户要求生成章节摘要时，按以下JSON格式输出：\n```json\n{\n  \"chapter_summary\": \"摘要内容\",\n  \"character_updates\": {\n    \"角色名\": {\n      \"current_status\": \"...\",\n      \"psychological_change\": \"...\",\n      \"growth\": \"...\"\n    }\n  },\n  \"foreshadowing_updates\": [\n    {\n      \"id\": \"FP-xxx\",\n      \"status\": \"未回收/部分揭示/已回收\",\n      \"recovery_chapter\": \"章节号或null\"\n    }\n  ]\n}\n```",
+  "samples_content": [
+    {
+      "input_context": "用户请求：分析一本都市异能小说，需要提取写作风格、世界观设定、角色模式和 Narrative 结构的核心特征。",
+      "output": {
+        "book_title": "未知作品",
+        "genre": "都市异能/玄幻",
+        "overall_style": "轻松幽默与热血深沉并存的二次元网文风格，快慢节奏交替，角色语言生动个性，世界观宏大且规则细致，伏笔密集。",
+        "writing_style": {
+          "tone": "轻松幽默中带有热血与深沉，时而吐槽调侃，时而严肃紧张",
+          "rhythm": "快慢交替，战斗紧凑，日常舒缓，多用短句和排比",
+          "sentence_patterns": "大量短句、口语化、网络流行语、中二台词、爆粗口",
+          "rhetoric": "比喻、拟人、夸张、排比、设问、对比",
+          "dialogue_style": "角色语言个性鲜明，常用反问、调侃、互怼"
+        },
+        "world_building": {
+          "setting_type": "平行地球，现代科技与古老灵力并存，有秘境、道诡战场等异空间",
+          "rule_system": "觉醒司命天物体系（寰级、特级等），修炼等级（命、崭、沉、流、御、古、尊、帝），奉天极武等级（天地玄黄），正星保护规则，死池契约",
+          "power_system": "司命天物体系 + 修炼等级 + 灵力属性"
+        },
+        "character_patterns": {
+          "archetypes": [
+            "慵懒天才",
+            "热血莽夫",
+            "高傲贵族",
+            "冷酷强者",
+            "扮猪吃虎导师",
+            "沉默杀手"
+          ],
+          "personality_methods": "通过行动、语言、内心独白、他人评价多维度刻画，反差塑造",
+          "dialogue_traits": "主角擅长阴阳怪气、抖机灵；配角各有口头禅",
+          "growth_arcs": "主角从浑噩到立志成为魔术王；配角成长弧线明显",
+          "relationship_dynamics": "师徒、对手、战友、恋人等多重关系，互动充满张力"
+        },
+        "narrative_structure": {
+          "chapter_function_pattern": "刺激事件→纠葛→转折→高潮→收束",
+          "pov_pattern": "95%主角视角，偶尔切换配角",
+          "foreshadowing_density": "高密度，平均每3-5章一个伏笔，回收周期10-20章",
+          "multiline_style": "主副线并行，比例约6:3:1",
+          "info_release": "每次1-2个新概念，解答同时引出更大谜团",
+          "tension_template": "波浪式上升，峰谷间隔5-8章",
+          "conflict_escalation": "个人→地域→国家→世界",
+          "emotional_rhythm": "幽默→紧张→伤感→燃爆→平静，循环往复"
+        }
+      }
+    },
+    {
+      "input_context": "用户请求：根据给定文本片段，识别其所属的叙事结构部分和写作风格特征。文本：'雨夜，悬崖古寺。尽飞尘浑身是血，雨水冲刷着血液，在地上蜿蜒成河。他面前，一具尸体缓缓倒下，眼中残留着难以置信。“操，真当老子好欺负？”他啐了一口血沫，手中卡牌微微发光。远处，惊雷炸响，仿佛天地为之震颤。'",
+      "output": {
+        "text_analysis": {
+          "narrative_position": "高潮部分（战斗胜利后的余波）",
+          "writing_style_matches": {
+            "tone": "热血、嚣张，略带中二",
+            "rhythm": "紧凑，短句连用",
+            "sentence_patterns": "口语化（'操'）、短句、动作描写",
+            "rhetoric": "拟人（'雨水冲刷着血液'）、夸张（'天地为之震颤'）",
+            "dialogue_style": "主角爆粗口，显示性格"
+          },
+          "world_building_hints": "灵力存在（卡牌发光），战斗背景（雨夜古寺），力量体系暗示（卡牌能力）",
+          "character_traits": "主角尽飞尘：战斗后嚣张，不畏杀人，有卡牌能力",
+          "foreshadowing_elements": "卡牌发光（伏笔卡牌能力）"
+        }
+      }
+    }
+  ],
+  "distilled_from": "蒸馏作品",
+  "analysis_summary": "轻松幽默与热血深沉并存的二次元网文风格，节奏快慢交替，角色语言生动个性，世界观宏大且规则细致，伏笔密集，叙事结构严谨，以主角视角为主，辅以多线并行推进剧情。",
+  "lifecycle": {
+    "status": "active",
+    "created_at": "2026-05-16T07:26:40.724009+00:00",
+    "updated_at": "2026-05-16T07:26:40.724031+00:00",
+    "version": "v1",
+    "corrections_count": 0
+  },
+  "engine": {
+    "name": "inkflow",
+    "kind": "inkflow-skill",
+    "skill_type": "librarian",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "temperature": 0.3,
+    "max_tokens": 2048,
+    "knowledge_dirs": [
+      "docs",
+      "references",
+      "samples"
+    ]
+  },
+  "schema_version": "1",
+  "slug": "distilled-librarian",
+  "kind": "inkflow-skill",
+  "name": "inkflow-librarian-distilled-librarian",
+  "id": "inkflow.librarian.distilled-librarian",
+  "artifacts": {
+    "agent_file": "agent.py",
+    "config_file": "config.yaml",
+    "prompt_file": "prompt.md",
+    "samples_file": "samples.json",
+    "manifest_file": "manifest.json",
+    "meta_file": "meta.json",
+    "skill_name": "inkflow-librarian-distilled-librarian",
+    "command_name": "librarian-distilled-librarian"
+  },
+  "summary": "[librarian] 图书管理员（蒸馏作品） (distilled-librarian)",
+  "version": "v1",
+  "created_at": "2026-05-16T07:26:40.724009+00:00",
+  "updated_at": "2026-05-16T07:26:40.724031+00:00",
+  "corrections_count": 0
+}

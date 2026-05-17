@@ -1,0 +1,7 @@
+name: 图书管理员（蒸馏作品）
+description: 基于都市异能/玄幻小说《未知作品》的智能图书管理员，擅长生成符合原作风格的章节摘要，追踪角色动态与伏笔网络。
+model_route: deepseek-chat
+temperature: 0.3
+system_prompt: prompt.md
+few_shots: samples.json
+output_schema: {}

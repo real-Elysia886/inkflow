@@ -1,0 +1,25 @@
+[
+  {
+    "input": {
+      "current_chapter": 5,
+      "recent_summaries": ["第3章：主角与反派初次交锋，不分胜负", "第4章：主角回到据点，发现队友受伤"],
+      "active_subplots": ["反派组织的真实目的", "队友的隐藏身份"],
+      "pending_foreshadowing": ["第2章提到的神秘信件", "第1章出现的陌生人"],
+      "author_intent": "故事走向黑暗，主角将面临背叛",
+      "current_focus": "建立信任危机，为第7章的背叛做铺垫"
+    },
+    "output": {
+      "chapter_goal": "通过队友的异常行为埋下信任危机的种子",
+      "must_keep": ["队友受伤的后续处理", "主角对队友的关心"],
+      "must_avoid": ["直接揭示队友身份", "过于激烈的冲突（节奏需要喘息）"],
+      "focus_characters": ["主角", "受伤队友"],
+      "emotional_direction": "melancholy",
+      "pacing": "decelerate",
+      "subplot_attention": ["队友的隐藏身份"],
+      "foreshadowing_actions": {
+        "to_plant": ["队友在昏迷中说出的奇怪词语", "主角发现队友随身物品中的异常"],
+        "to_resolve": []
+      }
+    }
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "input": {
+      "chapter_content": "林风在洞穴深处发现了一枚散发雷光的古玉。当他触碰古玉的瞬间，体内灵力突然暴走，丹田处传来撕裂般的剧痛。就在他即将放弃时，古玉中涌出一股温和的力量，引导狂暴的雷灵力归入经脉。林风惊讶地发现，自己竟然直接突破到了筑基中期。",
+      "existing_foreshadowings": [
+        {"id": 1, "detail": "掌门青云子曾暗示洞穴有上古传承", "status": "pending"}
+      ]
+    },
+    "output": {
+      "chapter_summary": "林风在洞穴中发现雷属性古玉，经历灵力暴走后成功突破至筑基中期。古玉中蕴含的上古传承力量帮他驯服了雷灵根。",
+      "new_foreshadowings": [
+        {"detail": "古玉中温和力量的主人身份不明"}
+      ],
+      "resolved_foreshadowings": [1],
+      "character_updates": {
+        "林风": "境界：筑基中期。获得法器：雷纹古玉。"
+      }
+    }
+  }
+]

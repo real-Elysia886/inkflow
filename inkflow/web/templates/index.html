@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>inkflow - AI 小说创作引擎</title>
+  <link rel="preconnect" href="https://fonts.font.im">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link href="https://fonts.font.im/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖊</text></svg>">
+</head>
+<body>
+<div class="bg-effects">
+  <div class="glow-blob purple"></div>
+  <div class="glow-blob blue"></div>
+</div>
+
+<div class="app">
+  <!-- ── Sidebar Navigation ── -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">✒️</div>
+      <span class="logo-text">inkflow</span>
+    </div>
+    
+    <div style="flex:1; overflow-y: auto;">
+      <div class="nav-group-label">创作中心</div>
+      <div class="nav-item active" data-page="page-generate">
+        <span class="nav-icon">⚡</span> <span>一键生成</span>
+      </div>
+      <div class="nav-item" data-page="page-workbench">
+        <span class="nav-icon">🏗</span> <span>作家工作台</span>
+      </div>
+      <div class="nav-item" data-page="page-chapters">
+        <span class="nav-icon">📖</span> <span>章节库</span>
+      </div>
+      
+      <div class="nav-group-label">真相文件</div>
+      <div class="nav-item" data-page="page-world">
+        <span class="nav-icon">🌍</span> <span>世界设定</span>
+      </div>
+      <div class="nav-item" data-page="page-distill">
+        <span class="nav-icon">🧪</span> <span>书籍蒸馏</span>
+      </div>
+      
+      <div class="nav-group-label">配置与系统</div>
+      <div class="nav-item" data-page="page-skills">
+        <span class="nav-icon">🧩</span> <span>技能管理</span>
+      </div>
+      <div class="nav-item" data-page="page-llm">
+        <span class="nav-icon">⚙️</span> <span>模型配置</span>
+      </div>
+      <div class="nav-item" data-page="page-projects">
+        <span class="nav-icon">📁</span> <span>项目管理</span>
+      </div>
+      <div class="nav-item" data-page="page-tokens">
+        <span class="nav-icon">📊</span> <span>Token 用量</span>
+      </div>
+    </div>
+    
+    <div style="padding: 24px 16px; border-top: 1px solid var(--border);">
+      <div id="sidebar-project-info" style="font-size: 0.8rem; color: var(--text-muted);">
+        当前项目: <span id="current-project-sidebar" style="color: var(--text);">默认项目</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Main Content Area ── -->
+  <main class="main">
+
+    <!-- ═══ 一键生成 ═══ -->
+    <div id="page-generate" class="page active">
+      <header class="page-header">
+        <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <h2 id="current-project-header">一键生成章节</h2>
+            <p class="page-desc">由 AI 专家集群协同规划并撰写下一章内容</p>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:4px">当前进度</div>
+            <div style="font-size:2.5rem; font-weight:800; color:var(--primary)">第 <span id="stat-chapter-top">0</span> 章</div>
+          </div>
+        </div>
+      </header>
+
+      <section class="card" id="gen-status-card">
+        <div class="card-header">
+          <h3><span class="nav-icon">📊</span> 项目看板 · <span id="current-project-name">默认项目</span></h3>
+          <div style="display:flex; gap:16px; align-items:center">
+            <select id="speed-mode" class="select-styled" style="min-width: 200px;">
+              <option value="draft">极速 (draft) · 2次调用</option>
+              <option value="fast">快速 (fast) · 3次调用</option>
+              <option value="standard" selected>标准 (standard) · 人工审阅</option>
+              <option value="full">精修 (full) · 10+次调用</option>
+            </select>
+            <button class="btn btn-outline" onclick="showSkillConfigModal()" style="padding: 12px 16px;" title="配置技能">
+              🎯 技能配置
+            </button>
+            <button class="btn btn-primary" id="gen-btn" onclick="generateChapter()" style="padding: 12px 32px;">
+              ⚡ 生成第 <span id="next-chapter">1</span> 章
+            </button>
+            <span style="border-left:1px solid var(--border);margin:0 8px;height:36px"></span>
+            <input id="auto-chapter-count" type="number" value="1" min="1" max="50" style="width:60px" title="生成章节数">
+            <button class="btn btn-success" id="auto-gen-btn" onclick="generateAuto()" style="padding: 12px 24px;">
+              🤖 全自动生成
+            </button>
+            <button class="btn btn-danger" id="cancel-btn" onclick="cancelCurrentOperation()" style="padding: 12px 20px; display:none;">
+              终止操作
+            </button>
+          </div>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-chapter">0</div>
+            <div class="stat-label">已完成章节</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-chars">0</div>
+            <div class="stat-label">活跃角色</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-foreshadow">0</div>
+            <div class="stat-label">待回收伏笔</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-threads">0</div>
+            <div class="stat-label">活跃情节线</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-avg-rating">-</div>
+            <div class="stat-label">平均评分</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pipeline Visualization -->
+      <section class="card" id="gen-progress" style="display:none">
+        <div class="card-header">
+          <h3><span class="nav-icon">🔄</span> 生成流水线进度</h3>
+          <button class="btn btn-outline" id="preview-review-btn" onclick="showLastResultModal()" style="display:none">预览校对</button>
+        </div>
+
+        <div class="pipeline-container">
+          <div class="pipeline-step" id="step-outline">
+            <div class="step-icon-wrap">📋</div>
+            <div class="step-name">补充大纲</div>
+          </div>
+          <div class="pipeline-connector" id="conn-outline"></div>
+          <div class="pipeline-step" id="step-plan">
+            <div class="step-icon-wrap">🎯</div>
+            <div class="step-name">制定计划</div>
+          </div>
+          <div class="pipeline-connector" id="conn-plan"></div>
+          <div class="pipeline-step" id="step-compose">
+            <div class="step-icon-wrap">🔧</div>
+            <div class="step-name">编排上下文</div>
+          </div>
+          <div class="pipeline-connector" id="conn-compose"></div>
+          <div class="pipeline-step" id="step-writer">
+            <div class="step-icon-wrap">✍️</div>
+            <div class="step-name">撰写初稿</div>
+          </div>
+          <div class="pipeline-connector" id="conn-writer"></div>
+          <div class="pipeline-step" id="step-editor">
+            <div class="step-icon-wrap">🔍</div>
+            <div class="step-name">品质审校</div>
+          </div>
+          <div class="pipeline-connector" id="conn-editor"></div>
+          <div class="pipeline-step" id="step-observer">
+            <div class="step-icon-wrap">👁</div>
+            <div class="step-name">事实提取</div>
+          </div>
+          <div class="pipeline-connector" id="conn-observer"></div>
+          <div class="pipeline-step" id="step-librarian">
+            <div class="step-icon-wrap">📚</div>
+            <div class="step-name">记忆入库</div>
+          </div>
+          <div class="pipeline-connector" id="conn-librarian"></div>
+          <div class="pipeline-step" id="step-human">
+            <div class="step-icon-wrap">👤</div>
+            <div class="step-name">人工审阅</div>
+          </div>
+        </div>
+
+        <div class="progress-bar-container" id="gen-progress-bar-container">
+          <div id="gen-progress-bar" class="progress-bar">0%</div>
+        </div>
+        <div class="log-container" id="gen-log"></div>
+      </section>
+
+      <!-- Outline Window Preview -->
+      <section class="card">
+        <div class="card-header">
+          <h3><span class="nav-icon">📋</span> 大纲滚动窗口（未来 5 章）</h3>
+          <div style="display:flex; gap:10px">
+            <button class="btn btn-outline btn-sm" onclick="loadOutlines()">刷新</button>
+            <button class="btn btn-outline btn-sm" onclick="regenerateOutlines()">重新生成</button>
+          </div>
+        </div>
+        <div id="outlines-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+      </section>
+    </div>
+
+    <!-- ═══ 章节库 ═══ -->
+    <div id="page-chapters" class="page">
+      <header class="page-header">
+        <h2>章节库</h2>
+        <p class="page-desc">浏览历史章节，或导入外部文本进行事实提取</p>
+      </header>
+
+      <div class="card">
+        <div class="card-header">
+          <h3><span class="nav-icon">📖</span> 所有章节</h3>
+          <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+            <input id="chapter-search" class="input-search" style="width:200px" placeholder="搜索章节内容...">
+            <input id="import-start-ch" type="number" value="1" min="1" style="width:80px" placeholder="起始章">
+            <button class="btn btn-outline btn-sm" onclick="importSingleChapter()">+ 导入单章</button>
+            <button class="btn btn-outline btn-sm" onclick="importBatchChapters()">++ 批量导入</button>
+          </div>
+          <div id="import-result" style="margin-top:12px; font-size:0.85rem"></div>
+        </div>
+        <div id="chapters-list"></div>
+      </div>
+
+      <!-- Chapter Comparison View -->
+      <div class="card" id="chapter-diff-card" style="display:none">
+        <div class="card-header">
+          <h3><span class="nav-icon">🔀</span> 章节对比（初稿 vs 终稿）</h3>
+          <button class="btn btn-outline btn-sm" onclick="closeChapterDiff()">关闭</button>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px">
+          <div>
+            <h4 style="margin-bottom:8px; color:var(--text-muted)">初稿 (Draft)</h4>
+            <div id="diff-draft" class="chapter-text" style="max-height:500px; overflow-y:auto; padding:16px; background:var(--bg-card); border-radius:8px; border:1px solid var(--border); font-size:0.9rem; line-height:1.8;"></div>
+          </div>
+          <div>
+            <h4 style="margin-bottom:8px; color:var(--text-muted)">终稿 (Final)</h4>
+            <div id="diff-final" class="chapter-text" style="max-height:500px; overflow-y:auto; padding:16px; background:var(--bg-card); border-radius:8px; border:1px solid var(--border); font-size:0.9rem; line-height:1.8;"></div>
+          </div>
+        </div>
+        <div id="diff-stats" style="margin-top:12px; font-size:0.85rem; color:var(--text-muted)"></div>
+      </div>
+    </div>
+
+    <!-- ═══ 故事记忆 / 世界设定 ═══ -->
+    <div id="page-world" class="page">
+      <header class="page-header">
+        <h2>故事记忆</h2>
+        <p class="page-desc">管理世界设定、核心规则与真相文件</p>
+      </header>
+
+      <!-- World Setting Templates (Plan B New Feature) -->
+      <section class="card">
+        <div class="card-header">
+          <h3><span class="nav-icon">📜</span> 世界设定模版 (核心规则)</h3>
+          <button class="btn btn-primary btn-sm" onclick="showAddSettingTemplateModal()">+ 添加规则维度</button>
+        </div>
+        <p class="page-desc" style="font-size:0.85rem; margin-bottom:20px">定义该世界的运行逻辑（如“修炼境界”、“阵营划分”），AI 将基于此理解自定义角色属性。</p>
+        <div id="setting-templates-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;"></div>
+      </section>
+
+      <div class="card">
+        <div class="card-header"><h3><span class="nav-icon">🌍</span> 基础背景设定</h3></div>
+        <div class="form-group"><textarea id="world-setting" rows="4" placeholder="详细描述世界观背景..."></textarea></div>
+        <div class="form-group"><label>当前章节号</label><input id="current-chapter" type="number" value="0" min="0" style="width:120px"></div>
+        <div style="display:flex; justify-content:flex-end;"><button class="btn btn-primary" onclick="saveWorldSetting()">保存背景</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3><span class="nav-icon">🎯</span> 创作方向 (治理)</h3></div>
+        <div class="form-row">
+          <div class="form-group"><label>长期作者意图</label><textarea id="author-intent" rows="2" placeholder="最终结局、核心主题..."></textarea></div>
+          <div class="form-group"><label>当前阶段关注点</label><textarea id="current-focus" rows="2" placeholder="接下来几章的重点..."></textarea></div>
+        </div>
+        <div style="display:flex; justify-content:flex-end;"><button class="btn btn-primary" onclick="saveGovernance()">保存创作方向</button></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3><span class="nav-icon">👤</span> 角色库</h3><button class="btn btn-primary btn-sm" onclick="showAddCharacterModal()">+ 添加角色</button></div>
+        <div id="characters-list"></div>
+      </div>
+
+      <div class="card"><div class="card-header"><h3><span class="nav-icon">🔗</span> 关系网</h3><button class="btn btn-primary btn-sm" onclick="showAddRelationshipModal()">+ 添加关系</button></div><div class="table-wrap"><table id="relationships-table"><thead><tr><th>角色 A</th><th>关系</th><th>角色 B</th><th>描述</th><th>操作</th></tr></thead><tbody></tbody></table></div></div>
+
+      <!-- Character Relationship Graph -->
+      <div class="card">
+        <div class="card-header">
+          <h3><span class="nav-icon">🕸</span> 角色关系图谱</h3>
+          <button class="btn btn-outline btn-sm" onclick="renderRelationshipGraph()">刷新图谱</button>
+        </div>
+        <div id="relationship-graph" style="width:100%; height:400px; background:var(--bg-card); border-radius:8px; border:1px solid var(--border); position:relative; overflow:hidden;">
+          <svg id="graph-svg" width="100%" height="100%"></svg>
+          <div id="graph-empty" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:var(--text-muted);">添加角色和关系后，点击"刷新图谱"查看可视化</div>
+        </div>
+      </div>
+
+      <div class="card"><div class="card-header"><h3><span class="nav-icon">🧵</span> 活跃情节线</h3><button class="btn btn-primary btn-sm" onclick="showAddPlotThreadModal()">+ 添加情节线</button></div><div id="plot-threads-list"></div></div>
+
+      <!-- Foreshadowing Tracker Panel -->
+      <div class="card">
+        <div class="card-header">
+          <h3><span class="nav-icon">🪝</span> 伏笔追踪面板</h3>
+          <div style="display:flex; gap:8px">
+            <span class="badge badge-warning" id="fs-pending-count">待收: 0</span>
+            <span class="badge badge-success" id="fs-resolved-count">已收: 0</span>
+            <button class="btn btn-primary btn-sm" onclick="showAddForeshadowModal()">+ 添加伏笔</button>
+          </div>
+        </div>
+        <div id="foreshadowing-tracker" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px;"></div>
+        <div class="table-wrap" style="margin-top:16px"><table id="foreshadowing-table"><thead><tr><th>内容</th><th>埋设章节</th><th>状态</th><th>操作</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ═══ 作家工作台 ═══ -->
+    <div id="page-workbench" class="page" style="padding:0">
+       <div class="workbench-layout">
+          <div class="wb-sidebar">
+             <div class="wb-sidebar-header">
+                <h3>任务清单 & 上下文</h3>
+                <select id="wb-chapter-select" class="select-styled" style="width:100%; margin-top:10px" onchange="loadWorkbenchContext()"></select>
+             </div>
+             <div class="wb-sidebar-body">
+                <details class="wb-section" open><summary>👤 重点角色</summary><div id="wb-characters"></div></details>
+                <details class="wb-section"><summary>📖 本章计划</summary><div id="wb-outline"></div></details>
+                <details class="wb-section"><summary>🪝 待收伏笔</summary><div id="wb-foreshadowing"></div></details>
+                <details class="wb-section"><summary>🧵 活跃情节线</summary><div id="wb-threads"></div></details>
+                <details class="wb-section"><summary>📝 历史摘要</summary><div id="wb-summaries"></div></details>
+             </div>
+             <div style="padding:16px; border-top:1px solid var(--border)">
+                <button class="btn btn-outline btn-sm" style="width:100%" onclick="wbRunReview()">🔍 运行 AI 品质审校</button>
+                <div id="wb-review-content" style="margin-top:12px; font-size:0.85rem"></div>
+             </div>
+          </div>
+          <div class="wb-editor">
+             <div class="wb-editor-header">
+                <span id="wb-chapter-title" style="font-weight:700">请选择章节</span>
+                <div style="display:flex; gap:10px">
+                   <button class="btn btn-outline btn-sm" onclick="wbLoadChapter()">加载正文</button>
+                   <button class="btn btn-primary btn-sm" onclick="wbSaveAndObserve()">💾 保存并提取事实</button>
+                </div>
+             </div>
+             <textarea id="wb-editor" class="wb-textarea" placeholder="在此开始沉浸式写作..."></textarea>
+          </div>
+       </div>
+    </div>
+
+    <!-- ═══ 书籍蒸馏 ═══ -->
+    <div id="page-distill" class="page">
+      <header class="page-header">
+        <h2>书籍蒸馏</h2>
+        <p class="page-desc">上传优秀作品，提取其叙事结构与文风指纹，并转化为 Skill</p>
+      </header>
+      
+      <div class="card">
+        <div class="card-header"><h3><span class="nav-icon">📁</span> 上传参考作品</h3></div>
+        <div class="form-group">
+          <input type="file" id="book-file" accept=".txt,.pdf">
+          <p style="margin:10px 0; color:var(--text-muted)">或者粘贴文本：</p>
+          <textarea id="book-text" rows="6" placeholder="粘贴至少 100 字的作品片段..."></textarea>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center">
+          <span id="upload-info" style="font-size:0.85rem; color:var(--primary-hover)"></span>
+          <button class="btn btn-primary" onclick="uploadBook()">开始解析</button>
+        </div>
+      </div>
+
+      <div class="card" id="distill-progress" style="display:none">
+        <div class="card-header"><h3><span class="nav-icon">⚙️</span> 解析进度</h3></div>
+        <div class="progress-bar-container"><div id="progress-bar" class="progress-bar">0%</div></div>
+        <div id="progress-log" class="log-container" style="margin-top:16px; height:150px"></div>
+      </div>
+
+      <div id="distill-results" style="display:none">
+        <div class="card">
+          <div class="card-header"><h3><span class="nav-icon">📊</span> 书籍特征分析</h3></div>
+          <div id="analysis-summary" class="fade-in"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3><span class="nav-icon">🧩</span> Skill 预览与生成</h3></div>
+          <div id="skills-preview" class="fade-in"></div>
+          <div style="display:flex; justify-content:flex-end; margin-top:20px">
+             <button class="btn btn-primary" onclick="installDistilledSkills()">安装生成的 Skill</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card" id="distill-installed" style="display:none">
+         <div class="card-header"><h3><span class="nav-icon">✅</span> 安装结果</h3></div>
+         <div id="install-result"></div>
+      </div>
+    </div>
+
+    <!-- ═══ 技能管理 ═══ -->
+    <div id="page-skills" class="page">
+      <header class="page-header">
+        <h2>技能管理</h2>
+        <p class="page-desc">管理各个环节的 AI 专家（Writer, Editor, Librarian...）的 Prompt 与行为</p>
+      </header>
+      <div id="skills-groups"></div>
+      <div id="skills-empty" style="text-align:center; padding:40px; color:var(--text-muted); display:none">暂无技能记录</div>
+    </div>
+
+    <!-- ═══ 模型配置 ═══ -->
+    <div id="page-llm" class="page">
+      <header class="page-header">
+        <h2>模型配置</h2>
+        <p class="page-desc">管理大模型 Provider 与不同角色的模型路由</p>
+      </header>
+      
+      <div class="card">
+        <div class="card-header">
+          <h3><span class="nav-icon">🌐</span> Provider 管理</h3>
+          <button class="btn btn-primary btn-sm" onclick="showAddProviderModal()">+ 添加 Provider</button>
+        </div>
+        <div class="table-wrap">
+          <table id="providers-table">
+            <thead>
+              <tr><th>名称</th><th>Base URL</th><th>环境变量</th><th>状态</th><th>操作</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="routes-groups"></div>
+      <div style="text-align:center;margin-top:16px"><button class="btn btn-primary btn-sm" onclick="showAddRouteModal()">+ 添加路由</button></div>
+    </div>
+
+    <!-- ═══ 项目管理 ═══ -->
+    <div id="page-projects" class="page">
+      <header class="page-header">
+        <h2>项目管理</h2>
+        <p class="page-desc">创建或切换不同的创作项目</p>
+      </header>
+      
+      <div class="card">
+        <div class="card-header">
+          <h3><span class="nav-icon">📁</span> 我的项目</h3>
+          <button class="btn btn-primary btn-sm" onclick="showCreateProjectModal()">+ 新建项目</button>
+        </div>
+        <div id="projects-list"></div>
+      </div>
+    </div>
+
+    <!-- ═══ Token 用量 ═══ -->
+    <div id="page-tokens" class="page">
+      <header class="page-header">
+        <h2>Token 用量</h2>
+        <p class="page-desc">实时监控 LLM 调用的 Token 消耗</p>
+      </header>
+
+      <div class="stats-grid" id="token-stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="token-total">0</div>
+          <div class="stat-label">总 Token 用量</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="token-prompt">0</div>
+          <div class="stat-label">输入 Token</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="token-completion">0</div>
+          <div class="stat-label">输出 Token</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="token-calls">0</div>
+          <div class="stat-label">调用次数</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:24px">
+        <div class="card-header">
+          <h3><span class="nav-icon">📋</span> 最近调用记录</h3>
+          <button class="btn btn-outline btn-sm" onclick="resetTokenStats()">重置统计</button>
+        </div>
+        <div id="token-history" style="max-height:400px;overflow-y:auto"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+name: 编辑（蒸馏作品）
+description: 基于该都市异能小说风格，进行语言、风格和情节逻辑的多维度编辑审校
+model_route: gpt-4o
+temperature: 0.2
+system_prompt: prompt.md
+few_shots: samples.json
+output_schema: {}

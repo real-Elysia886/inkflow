@@ -1,0 +1,68 @@
+{
+  "skill_type": "prophet",
+  "display_name": "大纲师（蒸馏作品）",
+  "description": "根据都市异能/玄幻网文风格，生成符合章节结构、伏笔管理和角色弧线要求的详细章纲。",
+  "provider": "deepseek",
+  "model": "deepseek-expert",
+  "temperature": 0.4,
+  "max_tokens": 4096,
+  "prompt_content": "# 大纲师 Skill\n\n你是一名专业的大纲师，擅长根据给定的书籍风格和叙事模式生成章节大纲。请严格遵循以下规则：\n\n## 章节结构指导\n- **开头（10%）**：快速引入场景，可用刺激事件（战斗、对话、悬念）开场，吸引读者。\n- **发展（40%）**：通过对话、战斗、探索推进情节，适当穿插角色互动或信息铺垫。\n- **高潮（30%）**：关键转折或冲突爆发，如能力觉醒、重大对决、秘密揭晓。\n- **结尾（20%）**：收束当前事件，留下悬念或金句，为下一章铺垫。\n\n## 伏笔管理规范\n- **埋设技巧**：通过物品（如卡牌、骸骨）、对话（预言、提醒）、梦境或直觉（心悸）设置伏笔。每3-5章埋一个明显伏笔。\n- **回收技巧**：后期揭晓能力来源、角色身份、世界观规则等，回收周期约10-20章。同时引出更大谜团，保持悬念连续性。\n\n## 角色引入和发展弧线指导\n- **引入**：通过行动、语言、他人评价多维度刻画角色，突出个性（如主角慵懒腹黑、配角各有口头禅）。\n- **弧线**：每个角色应有明确成长弧线，如主角从浑噩到立志，配角从傲慢到认可，从莽撞到成熟。\n- **关系**：设计师徒、对手、战友、恋人等多重关系，互动需推动剧情和情感。\n\n## 其他要点\n- 节奏需张弛有度，战斗紧凑，日常舒缓，情绪在幽默、紧张、伤感、燃爆间循环。\n- 冲突从个人→地域→国家→世界级逐步升级。\n- 章节结尾多用悬念或金句，吸引读者继续阅读。\n\n请基于以上规则，为指定章节生成详细大纲。",
+  "samples_content": [
+    {
+      "input_context": "用户请求：根据以下开头预测后续剧情。\"雨夜，悬崖古寺。尽飞尘浑身是血，雨水冲刷着血液，在地上蜿蜒成河。他面前，一具尸体缓缓倒下，眼中残留着难以置信。\"",
+      "output": {
+        "predicted_next": "“操，真当老子好欺负？”他啐了一口血沫，手中卡牌微微发光。远处，惊雷炸响，仿佛天地为之震颤。突然，一道黑影从雨中掠来，低沉的声音响起：“你这卡牌……竟能触发天象？”尽飞尘冷笑：“关你屁事！”黑影现身，竟是月明一，她眼中掠过一丝兴趣：“有趣，跟我走一趟。”"
+      }
+    },
+    {
+      "input_context": "用户请求：根据以下对话分析角色性格并预测后续发展。\"你管这叫修炼？”白芝芝瞪着胡烛，后者正悠闲地嗑着瓜子。“急什么，年轻人要沉得住气。”胡烛吐掉瓜子壳，“等会你就知道，这秘境里的玩意，够你喝一壶的。”\"",
+      "output": {
+        "character_analysis": "胡烛言行悠闲，善于隐藏实力，典型扮猪吃虎；白芝芝急躁直率，热血莽撞。",
+        "predicted_event": "话音刚落，地面裂开，一具诡尸爬出，嘶吼着扑来。胡烛依然嗑着瓜子，轻描淡写地说：“看吧，来了。”白芝芝大喝一声，挥拳迎上，却被诡尸一爪拍飞。胡烛摇头：“啧，所以说年轻人要沉住气。”"
+      }
+    }
+  ],
+  "distilled_from": "蒸馏作品",
+  "analysis_summary": "轻松幽默与热血深沉并存的二次元网文风格，节奏快慢交替，角色语言生动个性，世界观宏大且规则细致，伏笔密集，叙事结构严谨，以主角视角为主，辅以多线并行推进剧情。",
+  "lifecycle": {
+    "status": "active",
+    "created_at": "2026-05-16T07:26:40.664150+00:00",
+    "updated_at": "2026-05-16T07:26:40.664183+00:00",
+    "version": "v1",
+    "corrections_count": 0
+  },
+  "engine": {
+    "name": "inkflow",
+    "kind": "inkflow-skill",
+    "skill_type": "prophet",
+    "provider": "deepseek",
+    "model": "deepseek-expert",
+    "temperature": 0.4,
+    "max_tokens": 4096,
+    "knowledge_dirs": [
+      "docs",
+      "references",
+      "samples"
+    ]
+  },
+  "schema_version": "1",
+  "slug": "distilled-prophet",
+  "kind": "inkflow-skill",
+  "name": "inkflow-prophet-distilled-prophet",
+  "id": "inkflow.prophet.distilled-prophet",
+  "artifacts": {
+    "agent_file": "agent.py",
+    "config_file": "config.yaml",
+    "prompt_file": "prompt.md",
+    "samples_file": "samples.json",
+    "manifest_file": "manifest.json",
+    "meta_file": "meta.json",
+    "skill_name": "inkflow-prophet-distilled-prophet",
+    "command_name": "prophet-distilled-prophet"
+  },
+  "summary": "[prophet] 大纲师（蒸馏作品） (distilled-prophet)",
+  "version": "v1",
+  "created_at": "2026-05-16T07:26:40.664150+00:00",
+  "updated_at": "2026-05-16T07:26:40.664183+00:00",
+  "corrections_count": 0
+}
